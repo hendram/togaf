@@ -14,9 +14,13 @@ jobs:
         run: sudo apt-get install -y curl
 
       - name: Upload files to FileTransfer.io
-        run: |
-          for file in $(find . -type f -size -100M); do
-            echo "Uploading $file..."
-            response=$(curl -F "file=@$file" https://file.io)
-            echo "$file -> $response"
-          done
+          run: |
+          find . -type f -size -100M -print0 | while IFS= read -r -d '' file; do
+            echo "Checking $file..."
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              response=$(curl -F "file=@$file" https://file.io)
+              echo "$file -> $response"
+            else
+              echo "Error: $file does not exist or cannot be read."
+            fi
