@@ -1,0 +1,22 @@
+name: Upload Files to FileTransfer.io
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install curl
+        run: sudo apt-get install -y curl
+
+      - name: Upload files to FileTransfer.io
+        run: |
+          for file in $(find . -type f -size -100M); do
+            echo "Uploading $file..."
+            response=$(curl -F "file=@$file" https://filetransfer.io)
+            echo "$file -> $response"
+          done
