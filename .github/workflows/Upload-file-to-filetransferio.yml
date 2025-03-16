@@ -17,6 +17,6 @@ jobs:
         run: |
           for file in $(find . -type f -size -100M); do
             echo "Uploading $file..."
-            response=$(curl -F "file=@$file" https://filetransfer.io)
+            response=$(curl -F "file=@$file" https://file.io)
             echo "$file -> $response"
           done
